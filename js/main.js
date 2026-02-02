@@ -20,7 +20,7 @@
         initFormHandling();
         updateCopyrightYear();
         initModal();
-        initAccordion();
+        initTutorialFlow();
         initCopyButtons();
         initThemeToggle();
     }
@@ -169,7 +169,7 @@
 
         // Elements to animate
         const animatedElements = document.querySelectorAll(
-            '.feature-card, .service-card, .about-content, .about-visual, .section-header'
+            '.section-header, .benefit-card, .use-case-card, .featured-content, .featured-preview, .tutorial-step, .resource-card'
         );
 
         // Add fade-in class
@@ -453,31 +453,150 @@
     }
 
     // =========================================================================
-    // Accordion Functionality
+    // Tutorial Flow (Accordion + Progress)
     // =========================================================================
-    function initAccordion() {
-        const accordionTriggers = document.querySelectorAll('.accordion-trigger');
+    function initTutorialFlow() {
+        const steps = Array.from(document.querySelectorAll('.tutorial-step'));
+        const progressFill = document.getElementById('progress-fill');
+        const completedStepsEl = document.getElementById('completed-steps');
+        const totalStepsEl = document.getElementById('total-steps');
+        const progressBar = document.querySelector('.tutorial-progress');
+        const prevBtn = document.getElementById('prev-step');
+        const nextBtn = document.getElementById('next-step');
 
-        if (!accordionTriggers.length) return;
+        if (!steps.length) return;
 
-        accordionTriggers.forEach(function(trigger) {
-            trigger.addEventListener('click', function() {
-                const isExpanded = this.getAttribute('aria-expanded') === 'true';
-                const contentId = this.getAttribute('aria-controls');
-                const content = document.getElementById(contentId);
+        const stored = JSON.parse(localStorage.getItem('agentcs-completed-steps') || '[]');
+        const completedSteps = new Set(stored);
 
-                if (!content) return;
+        if (totalStepsEl) {
+            totalStepsEl.textContent = steps.length;
+        }
 
-                // Toggle current accordion
-                this.setAttribute('aria-expanded', !isExpanded);
+        function updateProgress() {
+            const completedCount = completedSteps.size;
+            const percent = Math.round((completedCount / steps.length) * 100);
 
-                if (isExpanded) {
-                    content.setAttribute('hidden', '');
-                } else {
+            if (completedStepsEl) {
+                completedStepsEl.textContent = completedCount;
+            }
+
+            if (progressFill) {
+                progressFill.style.width = percent + '%';
+            }
+
+            if (progressBar) {
+                progressBar.setAttribute('aria-valuenow', percent);
+            }
+
+            if (prevBtn) {
+                prevBtn.disabled = getActiveIndex() === 0;
+            }
+            if (nextBtn) {
+                nextBtn.disabled = getActiveIndex() === steps.length - 1;
+            }
+        }
+
+        function setStepCompletion(step, isComplete) {
+            const stepId = step.getAttribute('data-step');
+            const status = step.querySelector('.step-status');
+
+            if (isComplete) {
+                step.classList.add('completed');
+                completedSteps.add(stepId);
+                if (status) {
+                    status.setAttribute('aria-label', 'Step complete');
+                }
+            } else {
+                step.classList.remove('completed');
+                completedSteps.delete(stepId);
+                if (status) {
+                    status.setAttribute('aria-label', 'Step incomplete');
+                }
+            }
+
+            localStorage.setItem('agentcs-completed-steps', JSON.stringify(Array.from(completedSteps)));
+            updateProgress();
+        }
+
+        function closeAllExcept(currentStep) {
+            steps.forEach(function(step) {
+                const header = step.querySelector('.step-header');
+                const contentId = header ? header.getAttribute('aria-controls') : null;
+                const content = contentId ? document.getElementById(contentId) : null;
+
+                if (!header || !content) return;
+
+                if (step === currentStep) {
+                    header.setAttribute('aria-expanded', 'true');
                     content.removeAttribute('hidden');
+                } else {
+                    header.setAttribute('aria-expanded', 'false');
+                    content.setAttribute('hidden', '');
                 }
             });
+        }
+
+        function getActiveIndex() {
+            return steps.findIndex(function(step) {
+                const header = step.querySelector('.step-header');
+                return header && header.getAttribute('aria-expanded') === 'true';
+            });
+        }
+
+        steps.forEach(function(step, index) {
+            const header = step.querySelector('.step-header');
+            const contentId = header ? header.getAttribute('aria-controls') : null;
+            const content = contentId ? document.getElementById(contentId) : null;
+            const markBtn = step.querySelector('.mark-complete');
+
+            if (completedSteps.has(step.getAttribute('data-step'))) {
+                step.classList.add('completed');
+            }
+
+            if (header && content) {
+                header.addEventListener('click', function() {
+                    closeAllExcept(step);
+                    updateProgress();
+                });
+            }
+
+            if (markBtn) {
+                markBtn.addEventListener('click', function() {
+                    const isComplete = step.classList.contains('completed');
+                    setStepCompletion(step, !isComplete);
+                });
+            }
+
+            if (index === 0 && header && content) {
+                header.setAttribute('aria-expanded', 'true');
+                content.removeAttribute('hidden');
+            }
         });
+
+        if (prevBtn) {
+            prevBtn.addEventListener('click', function() {
+                const activeIndex = getActiveIndex();
+                if (activeIndex > 0) {
+                    closeAllExcept(steps[activeIndex - 1]);
+                    steps[activeIndex - 1].scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    updateProgress();
+                }
+            });
+        }
+
+        if (nextBtn) {
+            nextBtn.addEventListener('click', function() {
+                const activeIndex = getActiveIndex();
+                if (activeIndex < steps.length - 1) {
+                    closeAllExcept(steps[activeIndex + 1]);
+                    steps[activeIndex + 1].scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    updateProgress();
+                }
+            });
+        }
+
+        updateProgress();
     }
 
     // =========================================================================
@@ -527,8 +646,8 @@
         if (!themeToggle) return;
 
         // Theme colors for meta tag
-        var lightThemeColor = '#ffffff';
-        var darkThemeColor = '#0f0f1a';
+        var lightThemeColor = '#f8f5ef';
+        var darkThemeColor = '#11100f';
 
         // Get current theme
         function getCurrentTheme() {
