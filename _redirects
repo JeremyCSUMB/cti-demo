@@ -1,0 +1,19 @@
+# Netlify Redirects
+# https://docs.netlify.com/routing/redirects/
+
+# Redirect /home and /index to root
+/home       /   301
+/index      /   301
+/index.html /   301
+
+# Handle trailing slashes
+/features/  /features   301
+/about/     /about      301
+/services/  /services   301
+/contact/   /contact    301
+
+# Old URL redirects (examples for future use)
+# /old-page   /new-page   301
+
+# 404 fallback - must be last
+/*          /404.html   404
