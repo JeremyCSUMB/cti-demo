@@ -19,6 +19,9 @@
         initCounterAnimation();
         initFormHandling();
         updateCopyrightYear();
+        initModal();
+        initAccordion();
+        initCopyButtons();
     }
 
     // =========================================================================
@@ -42,9 +45,10 @@
             document.body.style.overflow = navMenu.classList.contains('active') ? 'hidden' : '';
         });
 
-        // Close menu when clicking a link
-        navLinks.forEach(function(link) {
-            link.addEventListener('click', function() {
+        // Close menu when clicking a link or modal trigger
+        const navInteractiveElements = document.querySelectorAll('.nav-link, .nav-cta, .nav-modal-trigger');
+        navInteractiveElements.forEach(function(element) {
+            element.addEventListener('click', function() {
                 navToggle.setAttribute('aria-expanded', 'false');
                 navMenu.classList.remove('active');
                 document.body.style.overflow = '';
@@ -332,6 +336,184 @@
         if (yearElement) {
             yearElement.textContent = new Date().getFullYear();
         }
+    }
+
+    // =========================================================================
+    // Modal Functionality
+    // =========================================================================
+    function initModal() {
+        const modalTriggers = document.querySelectorAll('[data-modal]');
+        const modals = document.querySelectorAll('.modal-overlay');
+
+        if (!modalTriggers.length || !modals.length) return;
+
+        let lastFocusedElement = null;
+
+        // Open modal
+        modalTriggers.forEach(function(trigger) {
+            trigger.addEventListener('click', function(e) {
+                e.preventDefault();
+                const modalId = this.getAttribute('data-modal');
+                const modal = document.getElementById(modalId);
+
+                if (modal) {
+                    lastFocusedElement = this;
+                    openModal(modal);
+                }
+            });
+        });
+
+        // Close modal via close button or backdrop
+        modals.forEach(function(modal) {
+            // Close button
+            const closeButtons = modal.querySelectorAll('.modal-close, .modal-close-btn');
+            closeButtons.forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    closeModal(modal);
+                });
+            });
+
+            // Backdrop click
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    closeModal(modal);
+                }
+            });
+        });
+
+        // Close on escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const activeModal = document.querySelector('.modal-overlay.active');
+                if (activeModal) {
+                    closeModal(activeModal);
+                }
+            }
+        });
+
+        function openModal(modal) {
+            modal.classList.add('active');
+            modal.removeAttribute('hidden');
+            document.body.classList.add('modal-open');
+
+            // Focus the modal for screen readers
+            const focusableElements = modal.querySelectorAll(
+                'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+            );
+            if (focusableElements.length > 0) {
+                focusableElements[0].focus();
+            }
+
+            // Trap focus within modal
+            trapFocus(modal);
+        }
+
+        function closeModal(modal) {
+            modal.classList.remove('active');
+            document.body.classList.remove('modal-open');
+
+            // Return focus to trigger element
+            if (lastFocusedElement) {
+                lastFocusedElement.focus();
+            }
+
+            // Hide modal after animation
+            setTimeout(function() {
+                if (!modal.classList.contains('active')) {
+                    modal.setAttribute('hidden', '');
+                }
+            }, 300);
+        }
+
+        function trapFocus(modal) {
+            const focusableElements = modal.querySelectorAll(
+                'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+            );
+
+            const firstFocusable = focusableElements[0];
+            const lastFocusable = focusableElements[focusableElements.length - 1];
+
+            modal.addEventListener('keydown', function(e) {
+                if (e.key !== 'Tab') return;
+
+                if (e.shiftKey) {
+                    if (document.activeElement === firstFocusable) {
+                        e.preventDefault();
+                        lastFocusable.focus();
+                    }
+                } else {
+                    if (document.activeElement === lastFocusable) {
+                        e.preventDefault();
+                        firstFocusable.focus();
+                    }
+                }
+            });
+        }
+    }
+
+    // =========================================================================
+    // Accordion Functionality
+    // =========================================================================
+    function initAccordion() {
+        const accordionTriggers = document.querySelectorAll('.accordion-trigger');
+
+        if (!accordionTriggers.length) return;
+
+        accordionTriggers.forEach(function(trigger) {
+            trigger.addEventListener('click', function() {
+                const isExpanded = this.getAttribute('aria-expanded') === 'true';
+                const contentId = this.getAttribute('aria-controls');
+                const content = document.getElementById(contentId);
+
+                if (!content) return;
+
+                // Toggle current accordion
+                this.setAttribute('aria-expanded', !isExpanded);
+
+                if (isExpanded) {
+                    content.setAttribute('hidden', '');
+                } else {
+                    content.removeAttribute('hidden');
+                }
+            });
+        });
+    }
+
+    // =========================================================================
+    // Copy to Clipboard Functionality
+    // =========================================================================
+    function initCopyButtons() {
+        const copyButtons = document.querySelectorAll('.copy-btn');
+
+        if (!copyButtons.length) return;
+
+        copyButtons.forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                const textToCopy = this.getAttribute('data-copy');
+                const copyText = this.querySelector('.copy-text');
+
+                if (!textToCopy) return;
+
+                // Copy to clipboard
+                navigator.clipboard.writeText(textToCopy).then(function() {
+                    // Success feedback
+                    btn.classList.add('copied');
+                    if (copyText) {
+                        copyText.textContent = 'Copied!';
+                    }
+
+                    // Reset after delay
+                    setTimeout(function() {
+                        btn.classList.remove('copied');
+                        if (copyText) {
+                            copyText.textContent = 'Copy';
+                        }
+                    }, 2000);
+                }).catch(function(err) {
+                    console.error('Failed to copy: ', err);
+                });
+            });
+        });
     }
 
     // =========================================================================

@@ -65,6 +65,11 @@
                 <li role="none"><a href="#about" class="nav-link" role="menuitem">About</a></li>
                 <li role="none"><a href="#services" class="nav-link" role="menuitem">Services</a></li>
                 <li role="none"><a href="#contact" class="nav-link" role="menuitem">Contact</a></li>
+                <li role="none">
+                    <button type="button" class="nav-link nav-modal-trigger" role="menuitem" data-modal="claude-code-modal" aria-haspopup="dialog">
+                        How to Use Claude Code
+                    </button>
+                </li>
                 <li role="none" class="nav-cta-wrapper">
                     <a href="#contact" class="btn btn-primary nav-cta" role="menuitem">Get Started</a>
                 </li>
@@ -380,6 +385,394 @@
             </div>
         </div>
     </footer>
+
+    <!-- Claude Code Modal -->
+    <div class="modal-overlay" id="claude-code-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-describedby="modal-description" hidden>
+        <div class="modal-container">
+            <div class="modal-header">
+                <div class="modal-title-wrapper">
+                    <div class="modal-icon" aria-hidden="true">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="16 18 22 12 16 6"></polyline>
+                            <polyline points="8 6 2 12 8 18"></polyline>
+                        </svg>
+                    </div>
+                    <h2 id="modal-title" class="modal-title">How to Use Claude Code</h2>
+                </div>
+                <button type="button" class="modal-close" aria-label="Close modal">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="modal-body" id="modal-description">
+                <!-- Overview Section -->
+                <section class="modal-section">
+                    <button type="button" class="accordion-trigger" aria-expanded="true" aria-controls="section-overview">
+                        <span class="accordion-icon" aria-hidden="true">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="12" y1="16" x2="12" y2="12"></line>
+                                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                            </svg>
+                        </span>
+                        <span class="accordion-title">Overview</span>
+                        <span class="accordion-chevron" aria-hidden="true">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </span>
+                    </button>
+                    <div class="accordion-content" id="section-overview">
+                        <p>Claude Code is an agentic coding tool that lives in your terminal, understands your codebase, and helps you code faster through natural language commands.</p>
+                        <div class="feature-list">
+                            <div class="feature-item">
+                                <span class="feature-bullet" aria-hidden="true"></span>
+                                <span><strong>Agentic Coding:</strong> Claude can edit files, run commands, and navigate your codebase autonomously</span>
+                            </div>
+                            <div class="feature-item">
+                                <span class="feature-bullet" aria-hidden="true"></span>
+                                <span><strong>Context Awareness:</strong> Understands your entire project structure and dependencies</span>
+                            </div>
+                            <div class="feature-item">
+                                <span class="feature-bullet" aria-hidden="true"></span>
+                                <span><strong>Terminal Native:</strong> Works directly in your terminal with full shell integration</span>
+                            </div>
+                            <div class="feature-item">
+                                <span class="feature-bullet" aria-hidden="true"></span>
+                                <span><strong>Safe by Default:</strong> Asks for permission before making changes to your files</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Installation Section -->
+                <section class="modal-section">
+                    <button type="button" class="accordion-trigger" aria-expanded="false" aria-controls="section-installation">
+                        <span class="accordion-icon" aria-hidden="true">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="7 10 12 15 17 10"></polyline>
+                                <line x1="12" y1="15" x2="12" y2="3"></line>
+                            </svg>
+                        </span>
+                        <span class="accordion-title">Installation & Setup</span>
+                        <span class="accordion-chevron" aria-hidden="true">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </span>
+                    </button>
+                    <div class="accordion-content" id="section-installation" hidden>
+                        <p>Get started with Claude Code in just a few steps:</p>
+
+                        <div class="step-list">
+                            <div class="step-item">
+                                <span class="step-number">1</span>
+                                <div class="step-content">
+                                    <h4>Install via npm</h4>
+                                    <div class="code-block">
+                                        <code>npm install -g @anthropic-ai/claude-code</code>
+                                        <button type="button" class="copy-btn" data-copy="npm install -g @anthropic-ai/claude-code" aria-label="Copy command">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                            </svg>
+                                            <span class="copy-text">Copy</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="step-item">
+                                <span class="step-number">2</span>
+                                <div class="step-content">
+                                    <h4>Navigate to your project</h4>
+                                    <div class="code-block">
+                                        <code>cd your-project-directory</code>
+                                        <button type="button" class="copy-btn" data-copy="cd your-project-directory" aria-label="Copy command">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                            </svg>
+                                            <span class="copy-text">Copy</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="step-item">
+                                <span class="step-number">3</span>
+                                <div class="step-content">
+                                    <h4>Start Claude Code</h4>
+                                    <div class="code-block">
+                                        <code>claude</code>
+                                        <button type="button" class="copy-btn" data-copy="claude" aria-label="Copy command">
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                            </svg>
+                                            <span class="copy-text">Copy</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="step-item">
+                                <span class="step-number">4</span>
+                                <div class="step-content">
+                                    <h4>Authenticate</h4>
+                                    <p>Follow the prompts to log in with your Anthropic account or API key.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Basic Commands Section -->
+                <section class="modal-section">
+                    <button type="button" class="accordion-trigger" aria-expanded="false" aria-controls="section-commands">
+                        <span class="accordion-icon" aria-hidden="true">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="4 17 10 11 4 5"></polyline>
+                                <line x1="12" y1="19" x2="20" y2="19"></line>
+                            </svg>
+                        </span>
+                        <span class="accordion-title">Basic Commands</span>
+                        <span class="accordion-chevron" aria-hidden="true">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </span>
+                    </button>
+                    <div class="accordion-content" id="section-commands" hidden>
+                        <div class="commands-grid">
+                            <div class="command-card">
+                                <div class="command-header">
+                                    <code class="command-name">claude</code>
+                                </div>
+                                <p class="command-desc">Start an interactive REPL session</p>
+                            </div>
+                            <div class="command-card">
+                                <div class="command-header">
+                                    <code class="command-name">claude "query"</code>
+                                </div>
+                                <p class="command-desc">Start with an initial prompt</p>
+                            </div>
+                            <div class="command-card">
+                                <div class="command-header">
+                                    <code class="command-name">claude -p "query"</code>
+                                </div>
+                                <p class="command-desc">Run a one-off command (non-interactive)</p>
+                            </div>
+                            <div class="command-card">
+                                <div class="command-header">
+                                    <code class="command-name">cat file | claude -p "query"</code>
+                                </div>
+                                <p class="command-desc">Pipe content for processing</p>
+                            </div>
+                            <div class="command-card">
+                                <div class="command-header">
+                                    <code class="command-name">claude -c</code>
+                                </div>
+                                <p class="command-desc">Continue the most recent conversation</p>
+                            </div>
+                            <div class="command-card">
+                                <div class="command-header">
+                                    <code class="command-name">claude --help</code>
+                                </div>
+                                <p class="command-desc">View all available options</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Example Use Cases Section -->
+                <section class="modal-section">
+                    <button type="button" class="accordion-trigger" aria-expanded="false" aria-controls="section-examples">
+                        <span class="accordion-icon" aria-hidden="true">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+                            </svg>
+                        </span>
+                        <span class="accordion-title">Example Use Cases</span>
+                        <span class="accordion-chevron" aria-hidden="true">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </span>
+                    </button>
+                    <div class="accordion-content" id="section-examples" hidden>
+                        <div class="example-cards">
+                            <div class="example-card">
+                                <div class="example-header">
+                                    <span class="example-tag">Bug Fixing</span>
+                                </div>
+                                <div class="example-prompt">
+                                    <span class="prompt-label">Try:</span>
+                                    <code>"Fix the authentication bug in the login form - users can't log in with valid credentials"</code>
+                                </div>
+                            </div>
+
+                            <div class="example-card">
+                                <div class="example-header">
+                                    <span class="example-tag">Feature Development</span>
+                                </div>
+                                <div class="example-prompt">
+                                    <span class="prompt-label">Try:</span>
+                                    <code>"Add a dark mode toggle to the settings page that persists user preference"</code>
+                                </div>
+                            </div>
+
+                            <div class="example-card">
+                                <div class="example-header">
+                                    <span class="example-tag">Code Refactoring</span>
+                                </div>
+                                <div class="example-prompt">
+                                    <span class="prompt-label">Try:</span>
+                                    <code>"Refactor the user service to use async/await instead of callbacks"</code>
+                                </div>
+                            </div>
+
+                            <div class="example-card">
+                                <div class="example-header">
+                                    <span class="example-tag">Testing</span>
+                                </div>
+                                <div class="example-prompt">
+                                    <span class="prompt-label">Try:</span>
+                                    <code>"Write unit tests for the cart module with edge cases for empty cart and invalid items"</code>
+                                </div>
+                            </div>
+
+                            <div class="example-card">
+                                <div class="example-header">
+                                    <span class="example-tag">Code Understanding</span>
+                                </div>
+                                <div class="example-prompt">
+                                    <span class="prompt-label">Try:</span>
+                                    <code>"Explain how the payment processing flow works in this codebase"</code>
+                                </div>
+                            </div>
+
+                            <div class="example-card">
+                                <div class="example-header">
+                                    <span class="example-tag">Git Operations</span>
+                                </div>
+                                <div class="example-prompt">
+                                    <span class="prompt-label">Try:</span>
+                                    <code>"Create a PR for my changes with a descriptive summary"</code>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Tips Section -->
+                <section class="modal-section">
+                    <button type="button" class="accordion-trigger" aria-expanded="false" aria-controls="section-tips">
+                        <span class="accordion-icon" aria-hidden="true">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                                <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                            </svg>
+                        </span>
+                        <span class="accordion-title">Tips for Effective Prompting</span>
+                        <span class="accordion-chevron" aria-hidden="true">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="6 9 12 15 18 9"></polyline>
+                            </svg>
+                        </span>
+                    </button>
+                    <div class="accordion-content" id="section-tips" hidden>
+                        <div class="tips-grid">
+                            <div class="tip-card">
+                                <div class="tip-icon" aria-hidden="true">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                                    </svg>
+                                </div>
+                                <h4 class="tip-title">Be Specific</h4>
+                                <p class="tip-desc">Include relevant file names, function names, or component names when asking about specific code.</p>
+                            </div>
+
+                            <div class="tip-card">
+                                <div class="tip-icon" aria-hidden="true">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <polyline points="12 6 12 12 16 14"></polyline>
+                                    </svg>
+                                </div>
+                                <h4 class="tip-title">Provide Context</h4>
+                                <p class="tip-desc">Explain the "why" behind your request. This helps Claude make better decisions.</p>
+                            </div>
+
+                            <div class="tip-card">
+                                <div class="tip-icon" aria-hidden="true">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="8" y1="6" x2="21" y2="6"></line>
+                                        <line x1="8" y1="12" x2="21" y2="12"></line>
+                                        <line x1="8" y1="18" x2="21" y2="18"></line>
+                                        <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                                        <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                                        <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                                    </svg>
+                                </div>
+                                <h4 class="tip-title">Break Down Tasks</h4>
+                                <p class="tip-desc">For complex changes, break them into smaller, focused requests for better results.</p>
+                            </div>
+
+                            <div class="tip-card">
+                                <div class="tip-icon" aria-hidden="true">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                                    </svg>
+                                </div>
+                                <h4 class="tip-title">Iterate</h4>
+                                <p class="tip-desc">Don't hesitate to ask follow-up questions or request modifications to refine the output.</p>
+                            </div>
+
+                            <div class="tip-card">
+                                <div class="tip-icon" aria-hidden="true">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                        <circle cx="12" cy="12" r="3"></circle>
+                                    </svg>
+                                </div>
+                                <h4 class="tip-title">Review Changes</h4>
+                                <p class="tip-desc">Always review the proposed changes before accepting. Use git diff to see what changed.</p>
+                            </div>
+
+                            <div class="tip-card">
+                                <div class="tip-icon" aria-hidden="true">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                                    </svg>
+                                </div>
+                                <h4 class="tip-title">Use Slash Commands</h4>
+                                <p class="tip-desc">Explore built-in commands like /help, /clear, and /compact for better workflow.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <div class="modal-footer">
+                <a href="https://docs.anthropic.com/en/docs/claude-code" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                        <polyline points="15 3 21 3 21 9"></polyline>
+                        <line x1="10" y1="14" x2="21" y2="3"></line>
+                    </svg>
+                    Full Documentation
+                </a>
+                <button type="button" class="btn btn-primary modal-close-btn">Got It</button>
+            </div>
+        </div>
+    </div>
 
     <!-- JavaScript -->
     <script src="js/main.js"></script>
