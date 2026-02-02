@@ -2092,6 +2092,109 @@ ol {
     border-color: rgba(75, 209, 198, 0.2);
 }
 
+.explainer-content {
+    display: grid;
+    gap: var(--space-6);
+}
+
+@media (min-width: 960px) {
+    .explainer-content {
+        grid-template-columns: 1.1fr 0.9fr;
+        align-items: start;
+    }
+}
+
+.explainer-text {
+    display: grid;
+    gap: var(--space-4);
+}
+
+.explainer-callout {
+    padding: var(--space-4);
+    border-radius: var(--radius-lg);
+    background: rgba(31, 138, 131, 0.08);
+    border: 1px solid rgba(31, 138, 131, 0.18);
+}
+
+[data-theme="dark"] .explainer-callout {
+    background: rgba(75, 209, 198, 0.1);
+    border-color: rgba(75, 209, 198, 0.2);
+}
+
+.explainer-callout h3 {
+    font-size: var(--font-size-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-gray-700);
+}
+
+.explainer-callout ul {
+    list-style: disc;
+    padding-left: var(--space-4);
+    display: grid;
+    gap: var(--space-2);
+    color: var(--color-gray-600);
+}
+
+.comparison-grid {
+    display: grid;
+    gap: var(--space-4);
+}
+
+@media (min-width: 900px) {
+    .comparison-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.comparison-card {
+    padding: var(--space-5);
+    border-radius: var(--radius-2xl);
+    background: var(--color-white);
+    border: 1px solid var(--color-gray-200);
+    box-shadow: var(--shadow-sm);
+    display: grid;
+    gap: var(--space-3);
+}
+
+[data-theme="dark"] .comparison-card {
+    background: #151311;
+    border-color: rgba(75, 209, 198, 0.2);
+}
+
+.comparison-card.highlight {
+    border-color: rgba(31, 138, 131, 0.35);
+    box-shadow: var(--shadow-md);
+}
+
+.comparison-card header {
+    display: grid;
+    gap: var(--space-1);
+}
+
+.comparison-card h3 {
+    font-size: var(--font-size-xl);
+    color: var(--color-gray-900);
+}
+
+.comparison-card p {
+    color: var(--color-gray-600);
+    font-size: var(--font-size-sm);
+}
+
+.comparison-card ul {
+    list-style: disc;
+    padding-left: var(--space-4);
+    display: grid;
+    gap: var(--space-2);
+    color: var(--color-gray-700);
+    font-size: var(--font-size-sm);
+}
+
+.comparison-icon {
+    font-size: 1.4rem;
+}
+
 .tutorial-progress {
     display: flex;
     align-items: center;
