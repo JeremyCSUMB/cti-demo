@@ -22,6 +22,7 @@
         initModal();
         initAccordion();
         initCopyButtons();
+        initThemeToggle();
     }
 
     // =========================================================================
@@ -513,6 +514,69 @@
                     console.error('Failed to copy: ', err);
                 });
             });
+        });
+    }
+
+    // =========================================================================
+    // Theme Toggle (Light/Dark Mode)
+    // =========================================================================
+    function initThemeToggle() {
+        var themeToggle = document.getElementById('theme-toggle');
+        var themeColorMeta = document.getElementById('theme-color-meta');
+
+        if (!themeToggle) return;
+
+        // Theme colors for meta tag
+        var lightThemeColor = '#ffffff';
+        var darkThemeColor = '#0f0f1a';
+
+        // Get current theme
+        function getCurrentTheme() {
+            var storedTheme = localStorage.getItem('theme');
+            if (storedTheme) {
+                return storedTheme;
+            }
+            return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+
+        // Apply theme
+        function applyTheme(theme) {
+            if (theme === 'dark') {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                if (themeColorMeta) {
+                    themeColorMeta.setAttribute('content', darkThemeColor);
+                }
+                themeToggle.setAttribute('aria-label', 'Switch to light mode');
+            } else {
+                document.documentElement.removeAttribute('data-theme');
+                if (themeColorMeta) {
+                    themeColorMeta.setAttribute('content', lightThemeColor);
+                }
+                themeToggle.setAttribute('aria-label', 'Switch to dark mode');
+            }
+        }
+
+        // Toggle theme
+        function toggleTheme() {
+            var currentTheme = getCurrentTheme();
+            var newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        }
+
+        // Initialize theme on page load
+        var initialTheme = getCurrentTheme();
+        applyTheme(initialTheme);
+
+        // Handle toggle click
+        themeToggle.addEventListener('click', toggleTheme);
+
+        // Listen for system theme changes
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
+            // Only update if user hasn't set a preference
+            if (!localStorage.getItem('theme')) {
+                applyTheme(e.matches ? 'dark' : 'light');
+            }
         });
     }
 

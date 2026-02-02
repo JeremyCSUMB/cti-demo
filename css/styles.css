@@ -94,6 +94,44 @@
     /* Container */
     --container-max: 1200px;
     --container-padding: var(--space-4);
+
+    /* Theme Transition */
+    --theme-transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* --------------------------------------------------------------------------
+   Dark Mode Theme
+   -------------------------------------------------------------------------- */
+[data-theme="dark"] {
+    /* Dark mode color overrides */
+    --color-gray-50: #1a1a2e;
+    --color-gray-100: #16213e;
+    --color-gray-200: #1f2937;
+    --color-gray-300: #374151;
+    --color-gray-400: #6b7280;
+    --color-gray-500: #9ca3af;
+    --color-gray-600: #d1d5db;
+    --color-gray-700: #e5e7eb;
+    --color-gray-800: #f3f4f6;
+    --color-gray-900: #f9fafb;
+
+    --color-white: #0f0f1a;
+    --color-black: #ffffff;
+
+    /* Adjusted primary colors for dark mode */
+    --color-primary: #818cf8;
+    --color-primary-dark: #6366f1;
+    --color-primary-light: #a5b4fc;
+
+    /* Dark mode gradients */
+    --gradient-hero: linear-gradient(180deg, #0f0f1a 0%, #1a1a2e 100%);
+
+    /* Dark mode shadows - more subtle */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 10px 10px -5px rgba(0, 0, 0, 0.3);
+    --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
 }
 
 /* --------------------------------------------------------------------------
@@ -121,6 +159,7 @@ body {
     background-color: var(--color-white);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    transition: var(--theme-transition);
 }
 
 img,
@@ -397,6 +436,73 @@ ol {
         padding-top: 0;
         border-top: none;
     }
+}
+
+/* Nav Actions (Theme Toggle + Hamburger) */
+.nav-actions {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0;
+    background: none;
+    border: 1px solid var(--color-gray-200);
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    color: var(--color-gray-600);
+    transition: var(--theme-transition), transform 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.theme-toggle:hover {
+    background-color: var(--color-gray-100);
+    color: var(--color-gray-900);
+    transform: scale(1.05);
+}
+
+.theme-toggle:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+}
+
+.theme-icon {
+    position: absolute;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* Light mode: show sun, hide moon */
+.theme-icon-sun {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+}
+
+.theme-icon-moon {
+    opacity: 0;
+    transform: rotate(-90deg) scale(0.5);
+}
+
+/* Dark mode: hide sun, show moon */
+[data-theme="dark"] .theme-icon-sun {
+    opacity: 0;
+    transform: rotate(90deg) scale(0.5);
+}
+
+[data-theme="dark"] .theme-icon-moon {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+}
+
+[data-theme="dark"] .theme-toggle {
+    border-color: var(--color-gray-300);
 }
 
 /* --------------------------------------------------------------------------
@@ -1659,4 +1765,161 @@ ol {
 /* Body scroll lock when modal is open */
 body.modal-open {
     overflow: hidden;
+}
+
+/* --------------------------------------------------------------------------
+   Dark Mode Component Overrides
+   -------------------------------------------------------------------------- */
+
+/* Header in dark mode */
+[data-theme="dark"] .header {
+    background-color: rgba(15, 15, 26, 0.95);
+    border-bottom-color: var(--color-gray-200);
+}
+
+/* Nav menu mobile in dark mode */
+[data-theme="dark"] .nav-menu {
+    background-color: var(--color-white);
+}
+
+/* Footer in dark mode */
+[data-theme="dark"] .footer {
+    background-color: #0a0a14;
+}
+
+[data-theme="dark"] .footer-bottom {
+    border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Hero shapes in dark mode - more subtle glow */
+[data-theme="dark"] .hero-shape-1 {
+    opacity: 0.7;
+}
+
+[data-theme="dark"] .hero-shape-2 {
+    opacity: 0.4;
+}
+
+[data-theme="dark"] .hero-shape-3 {
+    opacity: 0.3;
+}
+
+/* Form inputs in dark mode */
+[data-theme="dark"] .form-input {
+    background-color: var(--color-gray-100);
+    border-color: var(--color-gray-200);
+    color: var(--color-gray-900);
+}
+
+[data-theme="dark"] .form-input::placeholder {
+    color: var(--color-gray-400);
+}
+
+/* Feature cards in dark mode */
+[data-theme="dark"] .feature-card {
+    background-color: var(--color-gray-100);
+    border-color: var(--color-gray-200);
+}
+
+[data-theme="dark"] .feature-card:hover,
+[data-theme="dark"] .feature-card:focus {
+    border-color: var(--color-primary);
+}
+
+/* Service cards in dark mode */
+[data-theme="dark"] .service-card {
+    background-color: var(--color-gray-100);
+}
+
+[data-theme="dark"] .service-card:hover {
+    background-color: var(--color-gray-50);
+}
+
+[data-theme="dark"] .service-number {
+    color: var(--color-gray-300);
+}
+
+/* About section in dark mode */
+[data-theme="dark"] .about {
+    background-color: var(--color-gray-100);
+}
+
+[data-theme="dark"] .about-stats {
+    border-top-color: var(--color-gray-200);
+}
+
+/* About image placeholder in dark mode */
+[data-theme="dark"] .about-image-placeholder svg rect {
+    fill: url(#gradient-dark);
+}
+
+/* Modal in dark mode */
+[data-theme="dark"] .modal-container {
+    background-color: var(--color-gray-100);
+}
+
+[data-theme="dark"] .modal-header,
+[data-theme="dark"] .modal-footer {
+    background-color: var(--color-gray-50);
+    border-color: var(--color-gray-200);
+}
+
+[data-theme="dark"] .modal-section {
+    border-color: var(--color-gray-200);
+}
+
+[data-theme="dark"] .accordion-trigger {
+    background-color: var(--color-gray-100);
+}
+
+[data-theme="dark"] .accordion-trigger:hover,
+[data-theme="dark"] .accordion-trigger[aria-expanded="true"] {
+    background-color: var(--color-gray-50);
+}
+
+/* Code blocks in dark mode - keep dark */
+[data-theme="dark"] .code-block {
+    background-color: #0d1117;
+}
+
+/* Command cards in dark mode */
+[data-theme="dark"] .command-card {
+    background-color: var(--color-gray-50);
+    border-color: var(--color-gray-200);
+}
+
+[data-theme="dark"] .command-name {
+    background-color: var(--color-gray-100);
+}
+
+/* Example cards in dark mode */
+[data-theme="dark"] .example-card {
+    background-color: var(--color-gray-50);
+    border-color: var(--color-gray-200);
+}
+
+/* Tip cards in dark mode */
+[data-theme="dark"] .tip-card {
+    background-color: var(--color-gray-50);
+    border-color: var(--color-gray-200);
+}
+
+/* Social links in dark mode */
+[data-theme="dark"] .social-link {
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+[data-theme="dark"] .social-link:hover {
+    border-color: var(--color-primary);
+}
+
+/* Button secondary in dark mode */
+[data-theme="dark"] .btn-secondary {
+    border-color: var(--color-gray-300);
+    color: var(--color-gray-800);
+}
+
+[data-theme="dark"] .btn-secondary:hover {
+    background-color: var(--color-gray-100);
+    border-color: var(--color-gray-400);
 }
