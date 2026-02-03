@@ -24,6 +24,7 @@
         initCopyButtons();
         initThemeToggle();
         initQuiz();
+        initChatWidget();
     }
 
     // =========================================================================
@@ -197,6 +198,264 @@
         animatedElements.forEach(function(el) {
             observer.observe(el);
         });
+    }
+
+    // =========================================================================
+    // Tutorial Chat Widget (Gemini API)
+    // =========================================================================
+    function initChatWidget() {
+        const widget = document.getElementById('chat-widget');
+        const launcher = document.getElementById('chat-launcher');
+        const panel = document.getElementById('chat-panel');
+        const closeBtn = document.getElementById('chat-close');
+        const keyInput = document.getElementById('gemini-api-key');
+        const keySave = document.getElementById('chat-key-save');
+        const keyClear = document.getElementById('chat-key-clear');
+        const keyStatus = document.getElementById('chat-key-status');
+        const form = document.getElementById('chat-form');
+        const chatInput = document.getElementById('chat-input');
+        const chatSend = document.getElementById('chat-send');
+        const chatMessages = document.getElementById('chat-messages');
+        const chatStatus = document.getElementById('chat-status');
+
+        if (!widget || !launcher || !panel || !form) return;
+
+        const storageKey = 'agentcs_gemini_api_key';
+
+        function setStatus(message) {
+            if (chatStatus) {
+                chatStatus.textContent = message || '';
+            }
+        }
+
+        function getStoredKey() {
+            return localStorage.getItem(storageKey) || '';
+        }
+
+        function updateKeyUI() {
+            const key = getStoredKey();
+            const hasKey = key.length > 0;
+            if (keyStatus) {
+                keyStatus.textContent = hasKey ? 'Key saved' : 'Key not set';
+            }
+            if (chatInput) {
+                chatInput.disabled = !hasKey;
+            }
+            if (chatSend) {
+                chatSend.disabled = !hasKey;
+            }
+            if (!hasKey && chatInput) {
+                chatInput.placeholder = 'Set your Gemini API key to start chatting...';
+            } else if (chatInput) {
+                chatInput.placeholder = 'Type a question about the tutorial...';
+            }
+        }
+
+        function togglePanel(forceState) {
+            const isOpen = widget.getAttribute('data-state') === 'open';
+            const nextState = typeof forceState === 'boolean' ? forceState : !isOpen;
+            widget.setAttribute('data-state', nextState ? 'open' : 'closed');
+            launcher.setAttribute('aria-expanded', nextState ? 'true' : 'false');
+            panel.hidden = !nextState;
+            if (nextState && chatInput && !chatInput.disabled) {
+                chatInput.focus();
+            }
+        }
+
+        function escapeHtml(value) {
+            return value
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function applyInlineFormatting(value) {
+            let formatted = value;
+            formatted = formatted.replace(/`([^`]+)`/g, '<code>$1</code>');
+            formatted = formatted.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+            formatted = formatted.replace(/(^|[^*])\*(?!\*)([^*]+)\*(?!\*)/g, '$1<em>$2</em>');
+            formatted = formatted.replace(/\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+            return formatted;
+        }
+
+        function renderMarkdown(rawText) {
+            const safeText = escapeHtml(rawText || '');
+            const codeBlocks = [];
+            let withPlaceholders = safeText.replace(/```([\s\S]*?)```/g, function(match, code) {
+                const index = codeBlocks.length;
+                codeBlocks.push(code.trim());
+                return '@@CODEBLOCK' + index + '@@';
+            });
+
+            const lines = withPlaceholders.split(/\n/);
+            const output = [];
+            let inList = false;
+
+            lines.forEach(function(line) {
+                const listMatch = line.match(/^\s*[-*]\s+(.+)/);
+                if (listMatch) {
+                    if (!inList) {
+                        output.push('<ul>');
+                        inList = true;
+                    }
+                    output.push('<li>' + applyInlineFormatting(listMatch[1]) + '</li>');
+                    return;
+                }
+
+                if (inList) {
+                    output.push('</ul>');
+                    inList = false;
+                }
+
+                const trimmed = line.trim();
+                if (!trimmed) {
+                    return;
+                }
+                if (/^@@CODEBLOCK\d+@@$/.test(trimmed)) {
+                    output.push(trimmed);
+                    return;
+                }
+                output.push('<p>' + applyInlineFormatting(trimmed) + '</p>');
+            });
+
+            if (inList) {
+                output.push('</ul>');
+            }
+
+            let html = output.join('');
+            codeBlocks.forEach(function(block, index) {
+                html = html.replace('@@CODEBLOCK' + index + '@@', '<pre><code>' + block + '</code></pre>');
+            });
+            return html;
+        }
+
+        function appendMessage(role, text) {
+            if (!chatMessages) return;
+            const message = document.createElement('div');
+            message.className = 'chat-message chat-message--' + role;
+            message.innerHTML = renderMarkdown(text);
+            chatMessages.appendChild(message);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function buildTutorialContext() {
+            const tutorialSection = document.getElementById('tutorial');
+            if (!tutorialSection) return '';
+            const contextText = tutorialSection.innerText.replace(/\s+/g, ' ').trim();
+            return contextText.slice(0, 6000);
+        }
+
+        async function askGemini(question) {
+            const apiKey = getStoredKey();
+            if (!apiKey) {
+                setStatus('Add your Gemini API key to continue.');
+                return;
+            }
+
+            const tutorialContext = buildTutorialContext();
+            const prompt = [
+                'You are AgentCS, a friendly tutorial assistant.',
+                'Answer questions only using the provided tutorial context.',
+                'If the question is outside the tutorial, say you do not have that information.',
+                'Keep answers concise and step-focused.',
+                '',
+                'Tutorial context:',
+                tutorialContext || 'No tutorial context found.',
+                '',
+                'Question:',
+                question
+            ].join('\n');
+
+            setStatus('Thinking with Gemini…');
+            chatSend.disabled = true;
+
+            try {
+                const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=' + encodeURIComponent(apiKey), {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        contents: [{
+                            role: 'user',
+                            parts: [{ text: prompt }]
+                        }]
+                    })
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(errorText || 'Request failed');
+                }
+
+                const data = await response.json();
+                const candidate = data.candidates && data.candidates[0];
+                const parts = candidate && candidate.content && candidate.content.parts;
+                const answer = Array.isArray(parts)
+                    ? parts.map(function(part) { return part.text || ''; }).join('')
+                    : 'Sorry, I could not parse the response.';
+
+                appendMessage('assistant', answer.trim() || 'Sorry, I could not find that in the tutorial.');
+                setStatus('');
+            } catch (error) {
+                appendMessage('assistant', 'Something went wrong. Check your API key and try again.');
+                setStatus('Gemini error: ' + (error && error.message ? error.message : 'Unknown error'));
+            } finally {
+                chatSend.disabled = chatInput ? chatInput.disabled : true;
+            }
+        }
+
+        launcher.addEventListener('click', function() {
+            togglePanel();
+        });
+
+        closeBtn.addEventListener('click', function() {
+            togglePanel(false);
+        });
+
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape' && widget.getAttribute('data-state') === 'open') {
+                togglePanel(false);
+                launcher.focus();
+            }
+        });
+
+        keySave.addEventListener('click', function() {
+            if (!keyInput) return;
+            const trimmedKey = keyInput.value.trim();
+            if (!trimmedKey) {
+                setStatus('Please paste a valid Gemini API key.');
+                return;
+            }
+            localStorage.setItem(storageKey, trimmedKey);
+            keyInput.value = '';
+            setStatus('Key saved. You can start asking questions.');
+            updateKeyUI();
+        });
+
+        keyClear.addEventListener('click', function() {
+            localStorage.removeItem(storageKey);
+            setStatus('Key cleared.');
+            updateKeyUI();
+        });
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            if (!chatInput) return;
+            const question = chatInput.value.trim();
+            if (!question) return;
+            appendMessage('user', question);
+            chatInput.value = '';
+            askGemini(question);
+        });
+
+        const storedKey = getStoredKey();
+        if (storedKey && keyInput) {
+            keyInput.value = '';
+        }
+        updateKeyUI();
     }
 
     // =========================================================================

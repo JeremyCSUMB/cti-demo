@@ -1281,6 +1281,57 @@ Keep it simple for now - we'll add more features step by step." aria-label="Copy
         </div>
     </div>
 
+    <!-- Tutorial Chat Widget -->
+    <div class="chat-widget" id="chat-widget" data-state="closed">
+        <button type="button" class="chat-launcher" id="chat-launcher" aria-expanded="false" aria-controls="chat-panel">
+            <span class="chat-launcher-icon" aria-hidden="true">💬</span>
+            <span class="chat-launcher-text">Ask the tutorial</span>
+        </button>
+        <div class="chat-panel" id="chat-panel" role="dialog" aria-labelledby="chat-title" aria-describedby="chat-subtitle" hidden>
+            <div class="chat-header">
+                <div>
+                    <h3 class="chat-title" id="chat-title">AgentCS Tutorial Q&amp;A</h3>
+                    <p class="chat-subtitle" id="chat-subtitle">Bring your own Gemini API key to ask questions.</p>
+                </div>
+                <button type="button" class="chat-close" id="chat-close" aria-label="Close chat">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="chat-body">
+                <div class="chat-settings">
+                    <label class="chat-label" for="gemini-api-key">Gemini API key</label>
+                    <div class="chat-key-row">
+                        <input type="password" id="gemini-api-key" class="chat-input" placeholder="Paste your API key" autocomplete="off">
+                        <button type="button" class="btn btn-secondary chat-key-save" id="chat-key-save">Save</button>
+                    </div>
+                    <div class="chat-key-actions">
+                        <button type="button" class="chat-link" id="chat-key-clear">Clear key</button>
+                        <span class="chat-key-status" id="chat-key-status">Key not set</span>
+                    </div>
+                    <p class="chat-hint">Your key stays in this browser (localStorage) and is only sent to Gemini when you ask a question.</p>
+                </div>
+
+                <div class="chat-messages" id="chat-messages" role="log" aria-live="polite">
+                    <div class="chat-message chat-message--assistant">
+                        <p>Ask me anything about the Pac-Man tutorial steps, prerequisites, or prompt patterns.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-footer">
+                <div class="chat-status" id="chat-status" role="status" aria-live="polite"></div>
+                <form class="chat-form" id="chat-form">
+                    <textarea class="chat-textarea" id="chat-input" rows="2" placeholder="Type a question about the tutorial..." required></textarea>
+                    <button type="submit" class="btn btn-primary chat-send" id="chat-send">Ask</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- JavaScript -->
     <script src="js/main.js"></script>
 </body>
