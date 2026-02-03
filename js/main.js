@@ -23,6 +23,7 @@
         initTutorialFlow();
         initCopyButtons();
         initThemeToggle();
+        initQuiz();
     }
 
     // =========================================================================
@@ -458,27 +459,26 @@
     function initTutorialFlow() {
         const steps = Array.from(document.querySelectorAll('.tutorial-step'));
         const progressFill = document.getElementById('progress-fill');
-        const completedStepsEl = document.getElementById('completed-steps');
         const totalStepsEl = document.getElementById('total-steps');
+        const viewingStepEl = document.getElementById('viewing-step');
         const progressBar = document.querySelector('.tutorial-progress');
+        const tutorialSection = document.getElementById('tutorial');
         const prevBtn = document.getElementById('prev-step');
         const nextBtn = document.getElementById('next-step');
 
         if (!steps.length) return;
 
-        const stored = JSON.parse(localStorage.getItem('agentcs-completed-steps') || '[]');
-        const completedSteps = new Set(stored);
-
         if (totalStepsEl) {
             totalStepsEl.textContent = steps.length;
         }
 
-        function updateProgress() {
-            const completedCount = completedSteps.size;
-            const percent = Math.round((completedCount / steps.length) * 100);
+        function updateProgress(activeIndex) {
+            const viewIndex = typeof activeIndex === 'number' ? activeIndex : getActiveIndex();
+            const progressIndex = Math.max(viewIndex + 1, 1);
+            const percent = Math.round((progressIndex / steps.length) * 100);
 
-            if (completedStepsEl) {
-                completedStepsEl.textContent = completedCount;
+            if (viewingStepEl && viewIndex >= 0) {
+                viewingStepEl.textContent = viewIndex + 1;
             }
 
             if (progressFill) {
@@ -495,28 +495,6 @@
             if (nextBtn) {
                 nextBtn.disabled = getActiveIndex() === steps.length - 1;
             }
-        }
-
-        function setStepCompletion(step, isComplete) {
-            const stepId = step.getAttribute('data-step');
-            const status = step.querySelector('.step-status');
-
-            if (isComplete) {
-                step.classList.add('completed');
-                completedSteps.add(stepId);
-                if (status) {
-                    status.setAttribute('aria-label', 'Step complete');
-                }
-            } else {
-                step.classList.remove('completed');
-                completedSteps.delete(stepId);
-                if (status) {
-                    status.setAttribute('aria-label', 'Step incomplete');
-                }
-            }
-
-            localStorage.setItem('agentcs-completed-steps', JSON.stringify(Array.from(completedSteps)));
-            updateProgress();
         }
 
         function closeAllExcept(currentStep) {
@@ -548,23 +526,11 @@
             const header = step.querySelector('.step-header');
             const contentId = header ? header.getAttribute('aria-controls') : null;
             const content = contentId ? document.getElementById(contentId) : null;
-            const markBtn = step.querySelector('.mark-complete');
-
-            if (completedSteps.has(step.getAttribute('data-step'))) {
-                step.classList.add('completed');
-            }
 
             if (header && content) {
                 header.addEventListener('click', function() {
                     closeAllExcept(step);
-                    updateProgress();
-                });
-            }
-
-            if (markBtn) {
-                markBtn.addEventListener('click', function() {
-                    const isComplete = step.classList.contains('completed');
-                    setStepCompletion(step, !isComplete);
+                    updateProgress(index);
                 });
             }
 
@@ -580,7 +546,7 @@
                 if (activeIndex > 0) {
                     closeAllExcept(steps[activeIndex - 1]);
                     steps[activeIndex - 1].scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    updateProgress();
+                    updateProgress(activeIndex - 1);
                 }
             });
         }
@@ -591,12 +557,39 @@
                 if (activeIndex < steps.length - 1) {
                     closeAllExcept(steps[activeIndex + 1]);
                     steps[activeIndex + 1].scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    updateProgress();
+                    updateProgress(activeIndex + 1);
                 }
             });
         }
 
-        updateProgress();
+        if (tutorialSection && progressBar) {
+            const stickyObserver = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        progressBar.classList.add('is-sticky');
+                    } else {
+                        progressBar.classList.remove('is-sticky');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            stickyObserver.observe(tutorialSection);
+        }
+
+        const stepObserver = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    const index = steps.indexOf(entry.target);
+                    updateProgress(index);
+                }
+            });
+        }, { rootMargin: '-20% 0px -60% 0px', threshold: 0.1 });
+
+        steps.forEach(function(step) {
+            stepObserver.observe(step);
+        });
+
+        updateProgress(0);
     }
 
     // =========================================================================
@@ -655,7 +648,7 @@
             if (storedTheme) {
                 return storedTheme;
             }
-            return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            return 'dark';
         }
 
         // Apply theme
@@ -696,6 +689,75 @@
             if (!localStorage.getItem('theme')) {
                 applyTheme(e.matches ? 'dark' : 'light');
             }
+        });
+    }
+
+    // =========================================================================
+    // Quick Check Quiz
+    // =========================================================================
+    function initQuiz() {
+        const modal = document.getElementById('check-understanding');
+        const question = document.getElementById('quiz-question');
+        const options = modal ? modal.querySelectorAll('.quiz-option') : [];
+        const feedback = document.getElementById('quiz-feedback');
+        const resetBtn = document.getElementById('quiz-reset');
+        const triggers = document.querySelectorAll('.step-quiz-trigger');
+
+        if (!modal || !options.length) return;
+
+        function populateQuiz(trigger) {
+            if (!trigger || !question) return;
+            question.textContent = trigger.getAttribute('data-question');
+            options.forEach(function(option) {
+                const index = option.getAttribute('data-index');
+                option.textContent = trigger.getAttribute('data-option-' + index);
+                option.dataset.correct = trigger.getAttribute('data-correct');
+            });
+        }
+
+        function resetQuiz() {
+            options.forEach(function(option) {
+                option.classList.remove('correct', 'incorrect');
+                option.disabled = false;
+            });
+            if (feedback) {
+                feedback.textContent = '';
+            }
+        }
+
+        options.forEach(function(option) {
+            option.addEventListener('click', function() {
+                const correctIndex = option.dataset.correct;
+                const isRight = option.getAttribute('data-index') === correctIndex;
+
+                option.classList.add(isRight ? 'correct' : 'incorrect');
+                if (feedback) {
+                    feedback.textContent = isRight
+                        ? 'Correct! Small steps make changes easier to review, test, and debug.'
+                        : 'Not quite. Review the step goals, then try again.';
+                }
+                if (isRight) {
+                    options.forEach(function(btn) {
+                        btn.disabled = true;
+                    });
+                }
+            });
+        });
+
+        triggers.forEach(function(trigger) {
+            trigger.addEventListener('click', function() {
+                resetQuiz();
+                populateQuiz(trigger);
+            });
+        });
+
+        if (resetBtn) {
+            resetBtn.addEventListener('click', resetQuiz);
+        }
+
+        const closeButtons = modal.querySelectorAll('.modal-close, .modal-close-btn');
+        closeButtons.forEach(function(btn) {
+            btn.addEventListener('click', resetQuiz);
         });
     }
 

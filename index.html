@@ -48,7 +48,7 @@
     <script>
         (function() {
             var theme = localStorage.getItem('theme');
-            if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            if (theme !== 'light') {
                 document.documentElement.setAttribute('data-theme', 'dark');
             }
         })();
@@ -381,7 +381,9 @@
                     <div class="progress-bar">
                         <div class="progress-fill" id="progress-fill"></div>
                     </div>
-                    <span class="progress-text"><span id="completed-steps">0</span> of <span id="total-steps">8</span> steps completed</span>
+                    <span class="progress-text">
+                        Step <span id="viewing-step">1</span> of <span id="total-steps">8</span>
+                    </span>
                 </div>
 
                 <!-- Learning Objectives -->
@@ -531,7 +533,15 @@ claude</code></pre>
                                 </div>
                             </div>
                             <div class="step-actions">
-                                <button type="button" class="btn btn-sm btn-outline mark-complete" data-step="1">Mark as Complete</button>
+                                <button type="button" class="btn btn-sm btn-outline step-quiz-trigger" data-modal="check-understanding"
+                                    data-question="Why do we start by creating a dedicated project folder?"
+                                    data-option-1="So the agent can browse the entire file system."
+                                    data-option-2="To keep game files organized and easy to review."
+                                    data-option-3="To avoid using the terminal at all."
+                                    data-option-4="Because the game won't run otherwise."
+                                    data-correct="2">
+                                    Test My Understanding
+                                </button>
                             </div>
                         </div>
                     </article>
@@ -595,12 +605,8 @@ Keep it simple for now - we'll add more features step by step." aria-label="Copy
                                         </ul>
                                     </div>
                                     <div class="step-callout">
-                                        <h5>Check the Code</h5>
-                                        <ul>
-                                            <li>Canvas created and sized</li>
-                                            <li>Arrow keys update Pac-Man’s position</li>
-                                            <li>Walls drawn in blue against black background</li>
-                                        </ul>
+                                        <h5>What You Should See</h5>
+                                        <p>A canvas with a blue maze on a black background, plus a Pac-Man that moves with the arrow keys.</p>
                                     </div>
                                     <div class="step-callout">
                                         <h5>Troubleshooting</h5>
@@ -612,7 +618,15 @@ Keep it simple for now - we'll add more features step by step." aria-label="Copy
                                 </div>
                             </div>
                             <div class="step-actions">
-                                <button type="button" class="btn btn-sm btn-outline mark-complete" data-step="2">Mark as Complete</button>
+                                <button type="button" class="btn btn-sm btn-outline step-quiz-trigger" data-modal="check-understanding"
+                                    data-question="Why list requirements as bullet points in your prompt?"
+                                    data-option-1="It makes the prompt longer so the agent works harder."
+                                    data-option-2="It helps the agent verify each requirement."
+                                    data-option-3="It prevents the agent from asking questions."
+                                    data-option-4="It forces the agent to write only HTML."
+                                    data-correct="2">
+                                    Test My Understanding
+                                </button>
                             </div>
                         </div>
                     </article>
@@ -636,7 +650,7 @@ Keep it simple for now - we'll add more features step by step." aria-label="Copy
                         <div class="step-content" id="step-3-content" hidden>
                             <div class="step-grid">
                                 <div class="step-panel">
-                                    <p>Open <code>index.html</code> in your browser and try moving Pac-Man. Find one issue and ask the agent to fix it.</p>
+                                    <p>Open <code>index.html</code> in your browser and try moving Pac-Man. Find one issue and ask the agent to fix it. This is where you introduce collision detection: checking the next tile before moving.</p>
                                     <div class="prompt-box">
                                         <h5>Example Fix Prompt</h5>
                                         <div class="code-block prompt">
@@ -646,13 +660,9 @@ Keep it simple for now - we'll add more features step by step." aria-label="Copy
                                                     <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
                                                     <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
                                                 </svg>
-                                                <span class="copy-text">Copy</span>
-                                            </button>
-                                        </div>
+                                            <span class="copy-text">Copy</span>
+                                        </button>
                                     </div>
-                                    <div class="concept-explainer">
-                                        <h5>🎓 Concept: Collision Detection</h5>
-                                        <p>Check if Pac-Man’s next tile is a wall before moving. This is tile-based collision detection.</p>
                                     </div>
                                     <div class="pro-tip">
                                         <span class="pro-tip-badge">💡 Pro Tip</span>
@@ -668,11 +678,8 @@ Keep it simple for now - we'll add more features step by step." aria-label="Copy
                                         </ul>
                                     </div>
                                     <div class="step-callout">
-                                        <h5>Check the Code</h5>
-                                        <ul>
-                                            <li>A collision function is called before moving</li>
-                                            <li>Pac-Man stops at walls, not inside them</li>
-                                        </ul>
+                                        <h5>What You Should See</h5>
+                                        <p>A collision function runs before movement, and Pac-Man stops at walls instead of clipping through them.</p>
                                     </div>
                                     <div class="step-callout">
                                         <h5>Troubleshooting</h5>
@@ -684,7 +691,15 @@ Keep it simple for now - we'll add more features step by step." aria-label="Copy
                                 </div>
                             </div>
                             <div class="step-actions">
-                                <button type="button" class="btn btn-sm btn-outline mark-complete" data-step="3">Mark as Complete</button>
+                                <button type="button" class="btn btn-sm btn-outline step-quiz-trigger" data-modal="check-understanding"
+                                    data-question="What does collision detection prevent in the game?"
+                                    data-option-1="Pac-Man moving through walls."
+                                    data-option-2="Dots from rendering."
+                                    data-option-3="Keyboard input from working."
+                                    data-option-4="The game loop from running."
+                                    data-correct="1">
+                                    Test My Understanding
+                                </button>
                             </div>
                         </div>
                     </article>
@@ -708,7 +723,7 @@ Keep it simple for now - we'll add more features step by step." aria-label="Copy
                         <div class="step-content" id="step-4-content" hidden>
                             <div class="step-grid">
                                 <div class="step-panel">
-                                    <p>Time to add the iconic dots that Pac-Man eats and a score counter.</p>
+                                    <p>Time to add the iconic dots that Pac-Man eats and a score counter. You’ll store dot data in the maze array and update it as Pac-Man collects dots.</p>
                                     <div class="prompt-box">
                                         <h5>Your Prompt</h5>
                                         <div class="code-block prompt">
@@ -734,9 +749,9 @@ Keep it simple for now - we'll add more features step by step." aria-label="Copy
                                             </button>
                                         </div>
                                     </div>
-                                    <div class="concept-explainer">
-                                        <h5>🎓 Concept: Game State</h5>
-                                        <p>The dots live in an array representing the maze. When Pac-Man collects a dot, update the array and increment the score.</p>
+                                    <div class="pro-tip">
+                                        <span class="pro-tip-badge">💡 Pro Tip</span>
+                                        <p>Ask the agent to point you to the score variable so you can trace how it updates.</p>
                                     </div>
                                 </div>
                                 <div class="step-panel step-panel-aside">
@@ -748,12 +763,8 @@ Keep it simple for now - we'll add more features step by step." aria-label="Copy
                                         </ul>
                                     </div>
                                     <div class="step-callout">
-                                        <h5>Check the Code</h5>
-                                        <ul>
-                                            <li>Score renders at the top</li>
-                                            <li>Dots disappear on collision</li>
-                                            <li>Power pellets are larger than regular dots</li>
-                                        </ul>
+                                        <h5>What You Should See</h5>
+                                        <p>Dots appear in corridors, the score updates at the top, and power pellets look larger than regular dots.</p>
                                     </div>
                                     <div class="step-callout">
                                         <h5>Troubleshooting</h5>
@@ -765,7 +776,15 @@ Keep it simple for now - we'll add more features step by step." aria-label="Copy
                                 </div>
                             </div>
                             <div class="step-actions">
-                                <button type="button" class="btn btn-sm btn-outline mark-complete" data-step="4">Mark as Complete</button>
+                                <button type="button" class="btn btn-sm btn-outline step-quiz-trigger" data-modal="check-understanding"
+                                    data-question="Where should dot data live in your game?"
+                                    data-option-1="Only in the drawing function."
+                                    data-option-2="In an array that represents the maze."
+                                    data-option-3="In the HTML markup."
+                                    data-option-4="In localStorage only."
+                                    data-correct="2">
+                                    Test My Understanding
+                                </button>
                             </div>
                         </div>
                     </article>
@@ -789,7 +808,7 @@ Keep it simple for now - we'll add more features step by step." aria-label="Copy
                         <div class="step-content" id="step-5-content" hidden>
                             <div class="step-grid">
                                 <div class="step-panel">
-                                    <p>Now for the challenge: add a ghost that chases Pac-Man using simple AI.</p>
+                                    <p>Now for the challenge: add a ghost that chases Pac-Man using simple AI. At intersections, it chooses the path that gets closer to Pac-Man.</p>
                                     <div class="prompt-box">
                                         <h5>Your Prompt</h5>
                                         <div class="code-block prompt">
@@ -817,10 +836,6 @@ Keep it simple for now - we'll add more features step by step." aria-label="Copy
                                             </button>
                                         </div>
                                     </div>
-                                    <div class="concept-explainer">
-                                        <h5>🎓 Concept: Game AI</h5>
-                                        <p>The ghost uses a greedy algorithm: at each decision point, it chooses the path that gets closer to Pac-Man.</p>
-                                    </div>
                                     <div class="pro-tip">
                                         <span class="pro-tip-badge">💡 Pro Tip</span>
                                         <p>If the game feels too hard or too easy, ask: “Make the ghost move 20% slower.”</p>
@@ -835,12 +850,8 @@ Keep it simple for now - we'll add more features step by step." aria-label="Copy
                                         </ul>
                                     </div>
                                     <div class="step-callout">
-                                        <h5>Check the Code</h5>
-                                        <ul>
-                                            <li>Ghost respects walls</li>
-                                            <li>Movement is slightly slower than Pac-Man</li>
-                                            <li>Game stops on contact</li>
-                                        </ul>
+                                        <h5>What You Should See</h5>
+                                        <p>The ghost chases Pac-Man, respects walls, and the game stops on contact.</p>
                                     </div>
                                     <div class="step-callout">
                                         <h5>Troubleshooting</h5>
@@ -852,7 +863,15 @@ Keep it simple for now - we'll add more features step by step." aria-label="Copy
                                 </div>
                             </div>
                             <div class="step-actions">
-                                <button type="button" class="btn btn-sm btn-outline mark-complete" data-step="5">Mark as Complete</button>
+                                <button type="button" class="btn btn-sm btn-outline step-quiz-trigger" data-modal="check-understanding"
+                                    data-question="Why do we slow the ghost down slightly?"
+                                    data-option-1="To make the canvas draw faster."
+                                    data-option-2="To give the player a fair chance."
+                                    data-option-3="Because the AI can't move at full speed."
+                                    data-option-4="So the ghost ignores walls."
+                                    data-correct="2">
+                                    Test My Understanding
+                                </button>
                             </div>
                         </div>
                     </article>
@@ -876,7 +895,7 @@ Keep it simple for now - we'll add more features step by step." aria-label="Copy
                         <div class="step-content" id="step-6-content" hidden>
                             <div class="step-grid">
                                 <div class="step-panel">
-                                    <p>Implement the iconic power-up mechanic where Pac-Man can eat the ghost.</p>
+                                    <p>Implement the iconic power-up mechanic where Pac-Man can eat the ghost. This introduces a simple state machine for ghost behavior.</p>
                                     <div class="prompt-box">
                                         <h5>Your Prompt</h5>
                                         <div class="code-block prompt">
@@ -904,9 +923,9 @@ Keep it simple for now - we'll add more features step by step." aria-label="Copy
                                             </button>
                                         </div>
                                     </div>
-                                    <div class="concept-explainer">
-                                        <h5>🎓 Concept: State Machines</h5>
-                                        <p>The ghost now has multiple states: normal, scared, and eaten. State machines make behavior predictable.</p>
+                                    <div class="pro-tip">
+                                        <span class="pro-tip-badge">💡 Pro Tip</span>
+                                        <p>If the ghost never returns to normal, ask the agent to walk through the timer logic.</p>
                                     </div>
                                 </div>
                                 <div class="step-panel step-panel-aside">
@@ -918,11 +937,8 @@ Keep it simple for now - we'll add more features step by step." aria-label="Copy
                                         </ul>
                                     </div>
                                     <div class="step-callout">
-                                        <h5>Check the Code</h5>
-                                        <ul>
-                                            <li>Ghost color changes to blue in power mode</li>
-                                            <li>Ghost respawns after being eaten</li>
-                                        </ul>
+                                        <h5>What You Should See</h5>
+                                        <p>The ghost turns blue in power mode, flees Pac-Man, and respawns after being eaten.</p>
                                     </div>
                                     <div class="step-callout">
                                         <h5>Troubleshooting</h5>
@@ -934,7 +950,15 @@ Keep it simple for now - we'll add more features step by step." aria-label="Copy
                                 </div>
                             </div>
                             <div class="step-actions">
-                                <button type="button" class="btn btn-sm btn-outline mark-complete" data-step="6">Mark as Complete</button>
+                                <button type="button" class="btn btn-sm btn-outline step-quiz-trigger" data-modal="check-understanding"
+                                    data-question="What is power mode an example of?"
+                                    data-option-1="A state machine."
+                                    data-option-2="A database query."
+                                    data-option-3="A CSS animation."
+                                    data-option-4="A network request."
+                                    data-correct="1">
+                                    Test My Understanding
+                                </button>
                             </div>
                         </div>
                     </article>
@@ -986,6 +1010,10 @@ Keep it simple for now - we'll add more features step by step." aria-label="Copy
                                             </button>
                                         </div>
                                     </div>
+                                    <div class="pro-tip">
+                                        <span class="pro-tip-badge">💡 Pro Tip</span>
+                                        <p>Ask the agent to keep score and dots intact when resetting positions.</p>
+                                    </div>
                                 </div>
                                 <div class="step-panel step-panel-aside">
                                     <div class="step-callout">
@@ -996,11 +1024,8 @@ Keep it simple for now - we'll add more features step by step." aria-label="Copy
                                         </ul>
                                     </div>
                                     <div class="step-callout">
-                                        <h5>Check the Code</h5>
-                                        <ul>
-                                            <li>Lives decrement on ghost contact</li>
-                                            <li>Win screen appears when all dots are gone</li>
-                                        </ul>
+                                        <h5>What You Should See</h5>
+                                        <p>Lives decrement on ghost contact, and a win screen appears once all dots are collected.</p>
                                     </div>
                                     <div class="step-callout">
                                         <h5>Troubleshooting</h5>
@@ -1012,7 +1037,15 @@ Keep it simple for now - we'll add more features step by step." aria-label="Copy
                                 </div>
                             </div>
                             <div class="step-actions">
-                                <button type="button" class="btn btn-sm btn-outline mark-complete" data-step="7">Mark as Complete</button>
+                                <button type="button" class="btn btn-sm btn-outline step-quiz-trigger" data-modal="check-understanding"
+                                    data-question="What happens when Pac-Man loses a life?"
+                                    data-option-1="The score resets to zero."
+                                    data-option-2="Positions reset but dots and score remain."
+                                    data-option-3="The game restarts immediately."
+                                    data-option-4="All ghosts are removed."
+                                    data-correct="2">
+                                    Test My Understanding
+                                </button>
                             </div>
                         </div>
                     </article>
@@ -1037,17 +1070,30 @@ Keep it simple for now - we'll add more features step by step." aria-label="Copy
                             <div class="step-grid">
                                 <div class="step-panel">
                                     <p>Your game works! Now polish it and add your own creative touches.</p>
-                                    <div class="challenge-box">
-                                        <h5>🏆 Extension Challenges</h5>
-                                        <p>Try asking the agent to add these features:</p>
-                                        <ul>
-                                            <li><strong>Animations:</strong> "Make Pac-Man's mouth open and close as it moves"</li>
-                                            <li><strong>More Ghosts:</strong> "Add 3 more ghosts with different colors and slightly different AI behaviors"</li>
-                                            <li><strong>Sound Effects:</strong> "Add Web Audio API sounds for eating dots, power mode, and death"</li>
-                                            <li><strong>Levels:</strong> "After winning, start a new level with faster ghosts"</li>
-                                            <li><strong>High Score:</strong> "Save the high score in localStorage"</li>
-                                            <li><strong>Mobile Controls:</strong> "Add touch swipe controls for mobile"</li>
-                                        </ul>
+                                    <div class="prompt-box">
+                                        <h5>Your Prompt</h5>
+                                        <div class="code-block prompt">
+                                            <pre><code>Pick one extension and add it:
+- Make Pac-Man's mouth open and close as it moves
+- Add 3 more ghosts with different colors and AI
+- Add Web Audio API sounds for eating dots and power mode
+- After winning, start a new level with faster ghosts
+- Save the high score in localStorage
+- Add touch swipe controls for mobile</code></pre>
+                                            <button type="button" class="copy-btn" data-copy="Pick one extension and add it:
+- Make Pac-Man's mouth open and close as it moves
+- Add 3 more ghosts with different colors and AI
+- Add Web Audio API sounds for eating dots and power mode
+- After winning, start a new level with faster ghosts
+- Save the high score in localStorage
+- Add touch swipe controls for mobile" aria-label="Copy prompt">
+                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                                </svg>
+                                                <span class="copy-text">Copy</span>
+                                            </button>
+                                        </div>
                                     </div>
                                     <div class="pro-tip">
                                         <span class="pro-tip-badge">💡 Pro Tip</span>
@@ -1063,11 +1109,8 @@ Keep it simple for now - we'll add more features step by step." aria-label="Copy
                                         </ul>
                                     </div>
                                     <div class="step-callout">
-                                        <h5>Check the Code</h5>
-                                        <ul>
-                                            <li>Each new feature is isolated and tested</li>
-                                            <li>Game remains playable after additions</li>
-                                        </ul>
+                                        <h5>What You Should See</h5>
+                                        <p>Each new feature is added in isolation, tested, and the game remains playable.</p>
                                     </div>
                                     <div class="step-callout">
                                         <h5>Troubleshooting</h5>
@@ -1079,7 +1122,15 @@ Keep it simple for now - we'll add more features step by step." aria-label="Copy
                                 </div>
                             </div>
                             <div class="step-actions">
-                                <button type="button" class="btn btn-sm btn-outline mark-complete" data-step="8">Mark as Complete</button>
+                                <button type="button" class="btn btn-sm btn-outline step-quiz-trigger" data-modal="check-understanding"
+                                    data-question="Why add one extension at a time?"
+                                    data-option-1="So you can test and debug each change."
+                                    data-option-2="So the agent never edits files."
+                                    data-option-3="Because the terminal can't handle multiple changes."
+                                    data-option-4="Because levels only work last."
+                                    data-correct="1">
+                                    Test My Understanding
+                                </button>
                             </div>
                         </div>
                     </article>
@@ -1197,6 +1248,38 @@ Keep it simple for now - we'll add more features step by step." aria-label="Copy
             </div>
         </div>
     </footer>
+
+    <!-- Quick Check Modal -->
+    <div class="modal-overlay" id="check-understanding" hidden>
+        <div class="modal-container" role="dialog" aria-modal="true" aria-labelledby="check-title">
+            <div class="modal-header">
+                <div class="modal-title-wrapper">
+                    <span class="modal-icon">✅</span>
+                    <h3 class="modal-title" id="check-title">Check Your Understanding</h3>
+                </div>
+                <button type="button" class="modal-close" aria-label="Close">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-question" id="quiz-question">Why do we ask the agent to work in small steps when building Pac-Man?</p>
+                <div class="quiz-options" role="radiogroup" aria-label="Answer choices">
+                    <button type="button" class="quiz-option" data-index="1">Option 1</button>
+                    <button type="button" class="quiz-option" data-index="2">Option 2</button>
+                    <button type="button" class="quiz-option" data-index="3">Option 3</button>
+                    <button type="button" class="quiz-option" data-index="4">Option 4</button>
+                </div>
+                <div class="quiz-feedback" id="quiz-feedback" role="status" aria-live="polite"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary modal-close-btn">Close</button>
+                <button type="button" class="btn btn-primary" id="quiz-reset">Try Another</button>
+            </div>
+        </div>
+    </div>
 
     <!-- JavaScript -->
     <script src="js/main.js"></script>

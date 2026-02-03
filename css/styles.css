@@ -1531,6 +1531,19 @@ ol {
     margin: 0;
 }
 
+[data-theme="dark"] .modal-title,
+[data-theme="dark"] .modal-body,
+[data-theme="dark"] .modal-question,
+[data-theme="dark"] .quiz-option,
+[data-theme="dark"] .quiz-feedback {
+    color: var(--color-gray-800);
+}
+
+[data-theme="dark"] .quiz-option {
+    background: rgba(22, 20, 18, 0.9);
+    border-color: rgba(75, 209, 198, 0.2);
+}
+
 .modal-close {
     display: flex;
     align-items: center;
@@ -2068,6 +2081,14 @@ ol {
     font-weight: var(--font-weight-semibold);
 }
 
+[data-theme="dark"] .preview-console {
+    color: var(--color-gray-800);
+}
+
+[data-theme="dark"] .preview-console span {
+    color: var(--color-secondary);
+}
+
 .use-cases-grid {
     display: grid;
     gap: var(--space-4);
@@ -2201,6 +2222,23 @@ ol {
     gap: var(--space-4);
     margin-bottom: var(--space-8);
     flex-wrap: wrap;
+    position: sticky;
+    top: 5rem;
+    z-index: 5;
+    background: var(--color-white);
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-sm);
+}
+
+.tutorial-progress.is-sticky {
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--color-gray-200);
+}
+
+[data-theme="dark"] .tutorial-progress {
+    background: #151311;
+    border-color: rgba(75, 209, 198, 0.2);
 }
 
 .progress-bar {
@@ -2218,6 +2256,16 @@ ol {
     background: var(--gradient-primary);
     border-radius: var(--radius-full);
     transition: width var(--transition-base);
+}
+
+.progress-text {
+    font-size: var(--font-size-sm);
+    color: var(--color-gray-600);
+}
+
+.progress-divider {
+    margin: 0 var(--space-2);
+    color: var(--color-gray-400);
 }
 
 .tutorial-objectives,
@@ -2377,6 +2425,18 @@ ol {
     font-size: var(--font-size-sm);
 }
 
+[data-theme=\"dark\"] .step-title {
+    color: var(--color-gray-900);
+}
+
+[data-theme=\"dark\"] .step-summary {
+    color: var(--color-gray-700);
+}
+
+[data-theme=\"dark\"] .step-panel {
+    color: var(--color-gray-700);
+}
+
 .step-chevron {
     color: var(--color-gray-500);
     transition: transform var(--transition-base);
@@ -2410,6 +2470,10 @@ ol {
     gap: var(--space-4);
 }
 
+.step-panel > p {
+    max-width: 36rem;
+}
+
 .step-panel-aside {
     background: rgba(31, 138, 131, 0.06);
     border-radius: var(--radius-xl);
@@ -2418,7 +2482,7 @@ ol {
 }
 
 [data-theme=\"dark\"] .step-panel-aside {
-    background: rgba(75, 209, 198, 0.06);
+    background: rgba(75, 209, 198, 0.1);
     border-color: rgba(75, 209, 198, 0.2);
 }
 
@@ -2440,6 +2504,14 @@ ol {
     font-size: var(--font-size-sm);
 }
 
+[data-theme=\"dark\"] .step-callout h5 {
+    color: var(--color-gray-900);
+}
+
+[data-theme=\"dark\"] .step-callout li {
+    color: var(--color-gray-700);
+}
+
 .step-actions {
     margin-top: var(--space-4);
     display: flex;
@@ -2454,6 +2526,44 @@ ol {
     flex-wrap: wrap;
 }
 
+.quiz-options {
+    display: grid;
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+}
+
+.quiz-option {
+    text-align: left;
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-gray-200);
+    background: var(--color-gray-50);
+    cursor: pointer;
+    transition: transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.quiz-option:hover {
+    transform: translateY(-1px);
+    border-color: rgba(31, 138, 131, 0.4);
+    box-shadow: var(--shadow-sm);
+}
+
+.quiz-option.correct {
+    border-color: rgba(31, 138, 131, 0.7);
+    background: rgba(31, 138, 131, 0.12);
+}
+
+.quiz-option.incorrect {
+    border-color: rgba(255, 107, 107, 0.6);
+    background: rgba(255, 107, 107, 0.12);
+}
+
+.quiz-feedback {
+    margin-top: var(--space-4);
+    font-size: var(--font-size-sm);
+    color: var(--color-gray-700);
+}
+
 .code-block {
     position: relative;
     padding: var(--space-4);
@@ -2464,12 +2574,21 @@ ol {
     color: #f8f8f8;
 }
 
+[data-theme=\"dark\"] .code-block {
+    background: #090c10;
+    border-color: rgba(255, 255, 255, 0.18);
+}
+
 .code-header {
     font-size: var(--font-size-xs);
     text-transform: uppercase;
     letter-spacing: 0.08em;
     color: rgba(255, 255, 255, 0.6);
     margin-bottom: var(--space-2);
+}
+
+[data-theme=\"dark\"] .code-header {
+    color: rgba(255, 255, 255, 0.8);
 }
 
 .code-block pre {
@@ -2483,9 +2602,25 @@ ol {
     font-size: var(--font-size-sm);
 }
 
+[data-theme=\"dark\"] .code-block pre,
+[data-theme=\"dark\"] .code-block code {
+    color: #f8f8f2;
+}
+
 .code-block.prompt {
     border-color: rgba(243, 156, 50, 0.4);
     box-shadow: inset 0 0 0 1px rgba(243, 156, 50, 0.15);
+}
+
+[data-theme="dark"] .code-block.prompt {
+    background: #0f141a;
+    border-color: rgba(243, 156, 50, 0.55);
+    box-shadow: inset 0 0 0 1px rgba(243, 156, 50, 0.35);
+}
+
+[data-theme="dark"] .code-block.prompt pre,
+[data-theme="dark"] .code-block.prompt code {
+    color: #f8f8f2;
 }
 
 .copy-btn {
@@ -2511,6 +2646,14 @@ ol {
     background: var(--color-gray-50);
 }
 
+.prompt-box {
+    max-width: 36rem;
+}
+
+.pro-tip {
+    max-width: 36rem;
+}
+
 .challenge-box ul {
     list-style: disc;
     padding-left: var(--space-4);
@@ -2531,6 +2674,32 @@ ol {
 [data-theme=\"dark\"] .pro-tip {
     background: rgba(20, 18, 16, 0.9);
     border-color: rgba(75, 209, 198, 0.2);
+}
+
+[data-theme="dark"] .prompt-box h5,
+[data-theme="dark"] .concept-explainer h5,
+[data-theme="dark"] .challenge-box h5,
+[data-theme="dark"] .pro-tip h5,
+[data-theme="dark"] .prompt-box,
+[data-theme="dark"] .concept-explainer,
+[data-theme="dark"] .challenge-box,
+[data-theme="dark"] .pro-tip {
+    color: var(--color-gray-800);
+}
+
+[data-theme=\"dark\"] .prompt-box p,
+[data-theme=\"dark\"] .concept-explainer p,
+[data-theme=\"dark\"] .challenge-box p,
+[data-theme=\"dark\"] .pro-tip p,
+[data-theme=\"dark\"] .prompt-box li,
+[data-theme=\"dark\"] .concept-explainer li,
+[data-theme=\"dark\"] .challenge-box li,
+[data-theme=\"dark\"] .pro-tip li {
+    color: var(--color-gray-700);
+}
+
+[data-theme=\"dark\"] .step-panel p {
+    color: var(--color-gray-700);
 }
 
 .pro-tip-badge {
@@ -2719,7 +2888,7 @@ body.modal-open {
 
 /* Code blocks in dark mode - keep dark */
 [data-theme="dark"] .code-block {
-    background-color: #0d1117;
+    background-color: #090c10;
 }
 
 /* Command cards in dark mode */
